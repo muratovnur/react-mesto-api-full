@@ -1,0 +1,16 @@
+.form__input-error {
+  display: block;
+  color: #ff0000;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 400;
+  position: absolute;
+  top: 36px;
+  left: 36px;
+}
+
+@media screen and (max-width: 767px) {
+  .form__input-error {
+    left: 22px;
+  }
+}

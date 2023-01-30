@@ -1,0 +1,12 @@
+.profile__name-wrapper {
+  display: flex;
+  padding-bottom: 16px;
+  align-items: baseline;
+}
+
+@media screen and (max-width: 767px) {
+  .profile__name-wrapper {
+    justify-content: center;
+    padding-bottom: 0;
+  }
+}

@@ -1,0 +1,16 @@
+.profile__update-avatar {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px 26px;
+  background-color: rgba(0, 0, 0);
+}
+
+.profile__update-avatar:hover {
+  background-image: url("../../../images/update-avatar.svg");
+}

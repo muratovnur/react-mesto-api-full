@@ -1,0 +1,7 @@
+.element__title-wrapper {
+  margin: 25px 0 31px 21px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+}

@@ -1,0 +1,13 @@
+.form__input_type_auth {
+  margin: 0;
+  border-bottom: 2px solid #ccc;
+  color: #fff;
+}
+
+.form__input_type_auth::placeholder {
+  color: #ccc;
+}
+
+.form__input_type_auth:not(last-of-type) {
+  margin-bottom: 30px;
+}
