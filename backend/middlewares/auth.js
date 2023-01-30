@@ -12,7 +12,7 @@ const jwtVerify = (req, res, next) => {
     let payload;
 
     try {
-      payload = jwt.verify(token, 'secret');
+      payload = jwt.verify(token, process.env.NODE_ENV !== 'production' ? 'dev-secret' : process.env.JWT_SECRET);
       req.user = payload;
 
       next();

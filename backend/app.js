@@ -1,7 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
@@ -14,15 +16,21 @@ const { NotFoundError } = require('./errors/not-found-error');
 
 const app = express();
 
-// При записи адреса как localhost возникала ошибка.
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
+mongoose.connect(process.env.DATABASE_ADDRESS);
 
+app.use(cors({ origin: ['http://localhost:3000', 'mesto-nurbol.students.nomoredomainsclub.ru'], credentials: true, maxAge: 600 }));
 app.use(cookieParser());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 app.post('/signin', validateLogin, login);
 app.post('/signup', validateCreateUser, createUser);
@@ -40,4 +48,4 @@ app.use(errors());
 
 app.use(handleErrors);
 
-app.listen(3000);
+app.listen(process.env.PORT);

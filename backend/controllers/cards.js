@@ -6,7 +6,7 @@ const Card = require('../models/card');
 const { OK } = require('../utils/constants');
 
 const getCards = (req, res, next) => {
-  Card.find({})
+  Card.find({}).sort({ createdAt: -1 })
     .then((cards) => {
       const cardsFormatted = cards.map((card) => ({
         name: card.name,

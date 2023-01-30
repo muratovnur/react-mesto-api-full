@@ -97,38 +97,42 @@ function App() {
   }, [isAddPlacePopupOpen])
 
   React.useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-    .then(([userData, cardsData]) => {
-      setCurrentUser(userData);
-      setCards(cardsData);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    initializeFormValidation();
-  }, [])
+    if (loggedIn) {
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([userData, cardsData]) => {
+        setCurrentUser(userData);
+        setCards(cardsData);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
+  }, [loggedIn])
 
   React.useEffect(() => {
-    const token = localStorage.getItem('jwt')
+    const token = localStorage.getItem('userId')
 
     if (token) {
       auth.validateToken(token)
         .then(res => {
           setLoggedIn(true);
-          setEmail(res.data.email);
+          setEmail(res.email);
           history.push('/');
         })
         .catch(err => {
           console.log(err);
         })
     }
-  }, [history]) //По подсказке eslint
+    initializeFormValidation();
+    // eslint-disable-next-line
+  }, [])
 
   //Инициализация валидаций форм
   function initializeFormValidation() {
     formUpdateUserValidator.current = new FormValidator(validationConfig, document.querySelector('.form_type_edit-profile'))
     formAddPlaceValidator.current = new FormValidator(validationConfig, document.querySelector('.form_type_add-card'));
     formUpdateAvatarValidator.current = new FormValidator(validationConfig, document.querySelector('.form_type_update-avatar'));
+
     formUpdateUserValidator.current.enableValidation();
     formAddPlaceValidator.current.enableValidation();
     formUpdateAvatarValidator.current.enableValidation();
@@ -175,7 +179,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(userId => userId === currentUser._id);
     
     api.updateCardLike(card._id, isLiked)
     .then((newCard) => {
@@ -203,7 +207,8 @@ function App() {
   function onLogin(password, email) {
     auth.login(password, email)
     .then(res => {
-      localStorage.setItem('jwt', res.token);
+      //localStorage.setItem('jwt', res.token);
+      localStorage.setItem('userId', res._id);
       setLoggedIn(true);
       setEmail(email);
       history.push('/');
@@ -228,7 +233,7 @@ function App() {
   }
 
   function onSignOut() {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('userId');
     setLoggedIn(false);
     
   }

@@ -1,9 +1,9 @@
-import { requestInfo } from "./utils";
+import { baseUrl } from "./utils";
 
 class Api {
-  constructor({ baseUrl, headers }) {
+  constructor({ baseUrl, options }) {
     this.baseUrl = baseUrl;
-    this.headers = headers;
+    this.options = options;
   }
 
 
@@ -17,7 +17,7 @@ class Api {
 
   getUserInfo() {
     return fetch(`${this.baseUrl}/users/me` , {
-      headers: this.headers
+        ...this.options,
       })
       .then(res => this._handleResponseData(res))
   }
@@ -25,7 +25,7 @@ class Api {
 
   getInitialCards() {
     return fetch(`${this.baseUrl}/cards` , {
-        headers: this.headers
+        ...this.options,
       })
       .then(res => this._handleResponseData(res))
   }
@@ -33,8 +33,8 @@ class Api {
 
   addCard(name, link) {
     return fetch(`${this.baseUrl}/cards` , {
+        ...this.options,
         method: 'POST',
-        headers: this.headers,
         body: JSON.stringify({
           name: name,
           link: link
@@ -46,8 +46,8 @@ class Api {
 
   deleteCard(cardId) {
     return fetch(`${this.baseUrl}/cards/${cardId}`, {
+        ...this.options,
         method: 'DELETE',
-        headers: this.headers
       })
       .then(res => this._handleResponseData(res))
   }
@@ -55,8 +55,8 @@ class Api {
   
   updateUserInfo(name, about) {
     return fetch(`${this.baseUrl}/users/me` , {
+        ...this.options,
         method: 'PATCH',
-        headers: this.headers,
         body: JSON.stringify({
           name: name,
           about: about
@@ -68,8 +68,8 @@ class Api {
 
   updateUserAvatar(avatar) {
     return fetch(`${this.baseUrl}/users/me/avatar` , {
+        ...this.options,
         method: 'PATCH',
-        headers: this.headers,
         body: JSON.stringify({
           avatar: avatar
         })
@@ -80,11 +80,8 @@ class Api {
 
   updateCardLike(cardId, isLiked) {
     return fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
+        ...this.options,
         method: isLiked ? 'DELETE' : 'PUT',
-        headers: { 
-          ...this.headers, 
-          'Content-Type': 'application/json'
-        },
       })
       .then(res => this._handleResponseData(res))
   }
@@ -92,11 +89,12 @@ class Api {
 
 
 const api = new Api({
-  baseUrl: `https://mesto.nomoreparties.co/v1/${requestInfo.cohortId}`,
-  headers: {
-    //authorization: requestInfo.token,
-    //'Content-Type': 'application/json'
-    credentials: true,
+  baseUrl: baseUrl,
+  options: {
+    credentials: "include",
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 });
 

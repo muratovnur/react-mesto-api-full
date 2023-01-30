@@ -7,9 +7,5 @@ export const validationConfig = {
   errorClass: 'form__input-error_active'
 }
 
-export const requestInfo = {
-  token: 'c047c541-94af-4cf6-ab69-45316014bf8a',
-  cohortId: 'cohort-51'
-}
-
-export const baseUrl = 'https://auth.nomoreparties.co'
+//export const baseUrl = 'mesto-nurbol.students.nomoredomainsclub.ru'
+export const baseUrl = 'http://localhost:3001'

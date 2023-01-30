@@ -7,21 +7,6 @@ const { BadRequestError } = require('../errors/bad-request-error');
 const { NotFoundError } = require('../errors/not-found-error');
 const { ConflictError } = require('../errors/conflict-error');
 
-const getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => {
-      const usersFormatted = users.map((user) => ({
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-        email: user.email,
-        _id: user._id,
-      }));
-      res.status(OK).send(usersFormatted);
-    })
-    .catch(next);
-};
-
 const getUserInfo = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
@@ -38,32 +23,6 @@ const getUserInfo = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        next(new BadRequestError('Передан некорректный _id пользователя.'));
-      }
-      else {
-        next(err);
-      }
-    });
-};
-
-const getUserById = (req, res, next) => {
-  User.findById(req.params.userId)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден.');
-      }
-
-      res.status(OK).send({
-        name: user.name,
-        about: user.about,
-        avatar: user.avatar,
-        email: user.email,
-        _id: user._id,
-      });
-    })
-    .catch((err) => {
-      // Если передан некорректный _id произойдет CastError перед пойском пользователя
       if (err instanceof mongoose.Error.CastError) {
         next(new BadRequestError('Передан некорректный _id пользователя.'));
       }
@@ -163,12 +122,12 @@ const login = (req, res, next) => {
 
   User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV !== 'production' ? 'secret' : process.env.JWT_SECRET, { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV !== 'production' ? 'dev-secret' : process.env.JWT_SECRET, { expiresIn: '7d' });
 
       res.cookie('jwt', token, {
         maxAge: 43200000,
         httpOnly: true,
-        sameSite: true,
+        // sameSite: true,
       });
       res.send({
         name: user.name,
@@ -182,11 +141,52 @@ const login = (req, res, next) => {
 };
 
 module.exports = {
-  getUsers,
-  getUserById,
+  // getUsers,
+  // getUserById,
   getUserInfo,
   createUser,
   updateUserProfile,
   updateUserAvatar,
   login,
 };
+
+// const getUsers = (req, res, next) => {
+//   User.find({})
+//     .then((users) => {
+//       const usersFormatted = users.map((user) => ({
+//         name: user.name,
+//         about: user.about,
+//         avatar: user.avatar,
+//         email: user.email,
+//         _id: user._id,
+//       }));
+//       res.status(OK).send(usersFormatted);
+//     })
+//     .catch(next);
+// };
+//
+// const getUserById = (req, res, next) => {
+//   User.findById(req.params.userId)
+//     .then((user) => {
+//       if (!user) {
+//         throw new NotFoundError('Пользователь по указанному _id не найден.');
+//       }
+
+//       res.status(OK).send({
+//         name: user.name,
+//         about: user.about,
+//         avatar: user.avatar,
+//         email: user.email,
+//         _id: user._id,
+//       });
+//     })
+//     .catch((err) => {
+//       // Если передан некорректный _id произойдет CastError перед пойском пользователя
+//       if (err instanceof mongoose.Error.CastError) {
+//         next(new BadRequestError('Передан некорректный _id пользователя.'));
+//       }
+//       else {
+//         next(err);
+//       }
+//     });
+// };

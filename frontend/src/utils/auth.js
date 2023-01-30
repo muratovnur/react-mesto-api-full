@@ -24,6 +24,7 @@ export function register(password, email) {
 export function login(password, email) {
   return fetch(`${baseUrl}/signin`, {
     method: 'POST',
+    credentials: "include",
     headers: {
       "Content-Type": "application/json" 
     },
@@ -35,10 +36,11 @@ export function login(password, email) {
 
 export function validateToken(token) {
   return fetch(`${baseUrl}/users/me`, {
+    credentials: "include",
     headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    }
+      "Content-Type": "application/json" 
+    },
   })
+  
   .then(res => handleResponse(res))
 }

@@ -2,17 +2,6 @@ const { celebrate, Joi } = require('celebrate');
 const { ObjectId } = require('mongoose').Types;
 const { REGEX_FOR_URL } = require('../utils/constants');
 
-const validateGetUserById = celebrate({
-  params: Joi.object().keys({
-    userId: Joi.string().required().custom((value, helpers) => {
-      if (ObjectId.isValid(value)) {
-        return value;
-      }
-      return helpers.message('Невалидный _id пользователя.');
-    }),
-  }),
-});
-
 const validateCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
@@ -21,7 +10,7 @@ const validateCreateUser = celebrate({
       if (REGEX_FOR_URL.test(value)) {
         return value;
       }
-      return helpers.message({ message: 'Невалидный url для аватара.' });
+      return helpers.message('Невалидный url для аватара.');
     }),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
@@ -41,7 +30,7 @@ const validateUpdateUserAvatar = celebrate({
       if (REGEX_FOR_URL.test(value)) {
         return value;
       }
-      return helpers.message({ message: 'Невалидный url для аватара.' });
+      return helpers.message('Невалидный url для аватара.');
     }),
   }),
 });
@@ -60,7 +49,7 @@ const validateCreateCard = celebrate({
       if (REGEX_FOR_URL.test(value)) {
         return value;
       }
-      return helpers.message({ message: 'Невалидный url для изображения карточки.' });
+      return helpers.message('Невалидный url для изображения карточки.');
     }),
   }),
 });
@@ -76,8 +65,19 @@ const validateCardId = celebrate({
   }),
 });
 
+// const validateGetUserById = celebrate({
+//   params: Joi.object().keys({
+//     userId: Joi.string().required().custom((value, helpers) => {
+//       if (ObjectId.isValid(value)) {
+//         return value;
+//       }
+//       return helpers.message('Невалидный _id пользователя.');
+//     }),
+//   }),
+// });
+
 module.exports = {
-  validateGetUserById,
+  // validateGetUserById,
   validateCreateUser,
   validateUpdateUserProfile,
   validateUpdateUserAvatar,
