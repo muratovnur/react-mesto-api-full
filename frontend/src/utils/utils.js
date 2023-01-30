@@ -7,5 +7,5 @@ export const validationConfig = {
   errorClass: 'form__input-error_active'
 }
 
-//export const baseUrl = 'mesto-nurbol.students.nomoredomainsclub.ru'
-export const baseUrl = 'http://localhost:3001'
+export const baseUrl = 'mesto-nurbol.students.nomoredomainsclub.ru'
+//export const baseUrl = 'http://localhost:3001'
