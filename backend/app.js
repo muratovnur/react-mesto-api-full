@@ -18,7 +18,7 @@ const app = express();
 
 mongoose.connect(process.env.DATABASE_ADDRESS);
 
-app.use(cors({ origin: ['http://localhost:3000', 'mesto-nurbol.students.nomoredomainsclub.ru'], credentials: true, maxAge: 600 }));
+app.use(cors({ origin: ['http://localhost:3000', 'http://mesto-nurbol.students.nomoredomainsclub.ru'], credentials: true, maxAge: 600 }));
 app.use(cookieParser());
 
 app.use(bodyParser.json());
