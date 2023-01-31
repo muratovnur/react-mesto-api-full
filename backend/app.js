@@ -14,9 +14,11 @@ const { handleErrors } = require('./middlewares/error-handler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { NotFoundError } = require('./errors/not-found-error');
 
+const { DATABASE_ADDRESS = 'mongodb://127.0.0.1:27017/mestodb', PORT = 3001 } = process.env;
+
 const app = express();
 
-mongoose.connect(process.env.DATABASE_ADDRESS);
+mongoose.connect(DATABASE_ADDRESS);
 
 app.use(cors({ origin: ['http://localhost:3000', 'http://mesto-nurbol.students.nomoredomainsclub.ru'], credentials: true, maxAge: 600 }));
 app.use(cookieParser());
@@ -48,4 +50,4 @@ app.use(errors());
 
 app.use(handleErrors);
 
-app.listen(process.env.PORT);
+app.listen(PORT);
